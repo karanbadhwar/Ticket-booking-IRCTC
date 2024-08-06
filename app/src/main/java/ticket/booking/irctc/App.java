@@ -4,6 +4,7 @@
 package ticket.booking.irctc;
 
 public class App {
+
     public static void main(String[] args) {
 
     }
