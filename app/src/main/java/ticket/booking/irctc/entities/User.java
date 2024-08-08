@@ -12,4 +12,13 @@ public class User {
     private List<Ticket> ticketsBooked;
 
     private String userId;
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getPassword()
+    {
+        return this.password;
+    }
 }

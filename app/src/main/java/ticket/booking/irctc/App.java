@@ -3,9 +3,38 @@
  */
 package ticket.booking.irctc;
 
+import java.io.File;
+
 public class App {
 
     public static void main(String[] args) {
 
+
     }
 }
+
+//Trying to get the Directory Hierarchy
+// Get the absolute path of the currently executing class file
+//String path = "app/main/java/ticket/booking/irctc/localDB/users.json";
+//
+//// Convert the path to a File object
+//File file = new File(path);
+//
+//// Check if the file object is a directory or a file
+//        if (file.isFile()) {
+//file = file.getParentFile(); // Get the directory containing the file
+//        }
+//
+//                // Print the directory hierarchy
+//                System.out.println("Directory hierarchy:");
+//        while (file != null) {
+//        System.out.println(file.getAbsolutePath());
+//file = file.getParentFile(); // Move to the parent directory
+//        }
+
+
+//        // Get the current working directory
+//        String currentDir = System.getProperty("user.dir");
+//
+//        // Print the current working directory
+//        System.out.println("Current working directory: " + currentDir);

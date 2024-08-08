@@ -7,6 +7,7 @@ import ticket.booking.irctc.entities.User;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public class UserBookingService {
 
@@ -17,7 +18,7 @@ public class UserBookingService {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     //Path to the Local DB
-    private static final String USERS_PATH = "../localDB/users.json";
+    private static final String USERS_PATH = "app/src/main/java/ticket/booking/irctc/localDB/users.json";
 
     public UserBookingService(User user) throws IOException
     {
@@ -26,5 +27,13 @@ public class UserBookingService {
 
         //Deserializing the User from localDB
         userList = OBJECT_MAPPER.readValue(users, new TypeReference<List<User>>() {});
+    }
+
+    //Login User
+    public boolean loginUser()
+    {
+        Optional<User> foundUser = userList.stream().filter(user1 -> {
+            return user1.getName().equals(user.getName()) && userServiceutil.checkPassword(user.getPassword())
+        });
     }
 }
