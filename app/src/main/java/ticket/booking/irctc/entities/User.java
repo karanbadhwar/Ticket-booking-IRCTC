@@ -13,6 +13,15 @@ public class User {
 
     private String userId;
 
+    public User(String name, String password, String hashedPassword, List<Ticket> ticketsBooked, String userId){
+        this.name = name;
+        this.password = password;
+        this.hashedPassword = hashedPassword;
+        this.ticketsBooked = ticketsBooked;
+        this.userId = userId;
+    }
+    public User(){}
+
     public String getName(){
         return this.name;
     }
@@ -20,5 +29,44 @@ public class User {
     public String getPassword()
     {
         return this.password;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public List<Ticket> getTicketsBooked() {
+        return ticketsBooked;
+    }
+
+    public void printTickets(){
+        for (int i = 0; i<ticketsBooked.size(); i++){
+            System.out.println(ticketsBooked.get(i).getTicketInfo());
+        }
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public void setTicketsBooked(List<Ticket> ticketsBooked) {
+        this.ticketsBooked = ticketsBooked;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void cancelBooking(String ticketId)
+    {
+        ticketsBooked = ticketsBooked.stream().filter(tic -> ticketId.equals(tic.getTicketId())).toList();
     }
 }

@@ -4,13 +4,44 @@
 package ticket.booking.irctc;
 
 import java.io.File;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class App {
 
     public static void main(String[] args) {
+        List<Integer> list = Arrays.asList(1,2,3,4,54,5);
 
+//        One way to use Lambda inside filter method
+        List<Integer> list1 = list.stream().filter(l -> l % 2 == 0).toList();
+//        List<Integer> list1 = list.stream().filter(l -> l % 2 == 0).collect(Collectors.toList());
 
+        //Second way to use Predicate's test method inside the filter method wit anonymous class
+//        List<Integer> list1 = list.stream().filter(new Predicate<Integer>() {
+//            @Override
+//            public boolean test(Integer integer) {
+//                return false;
+//            }
+//        }).toList();
+
+        //Third way by calling the method itself inside filter method
+//        List<Integer> list1 = list.stream().filter(isEven()).toList();
+//        System.out.println(list1);
     }
+
+//    public static Predicate<Integer> isEven(){
+//        //One way to use actual function
+////        return new Predicate<Integer>() {
+////            @Override
+////            public boolean test(Integer integer) {
+////                return integer % 2 ==0;
+////         };
+//
+//        //Returning lambdas
+//        return i -> i % 2 == 0;
+//    }
 }
 
 //Trying to get the Directory Hierarchy
