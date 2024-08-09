@@ -3,45 +3,117 @@
  */
 package ticket.booking.irctc;
 
+import ticket.booking.irctc.entities.Ticket;
+import ticket.booking.irctc.entities.Train;
+import ticket.booking.irctc.entities.User;
+import ticket.booking.irctc.services.UserBookingService;
+import ticket.booking.irctc.util.UserServiceUtil;
+
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 import java.util.function.Predicate;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class App {
 
     public static void main(String[] args) {
-        List<Integer> list = Arrays.asList(1,2,3,4,54,5);
+        System.out.println("Running Train Booking System");
+        Scanner scan = new Scanner(System.in);
 
-//        One way to use Lambda inside filter method
-        List<Integer> list1 = list.stream().filter(l -> l % 2 == 0).toList();
-//        List<Integer> list1 = list.stream().filter(l -> l % 2 == 0).collect(Collectors.toList());
+        int option = 0;
+        UserBookingService userBookingService;
+        try {
+            userBookingService = new UserBookingService();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
 
-        //Second way to use Predicate's test method inside the filter method wit anonymous class
-//        List<Integer> list1 = list.stream().filter(new Predicate<Integer>() {
-//            @Override
-//            public boolean test(Integer integer) {
-//                return false;
-//            }
-//        }).toList();
+        while (option != 7) {
+            System.out.println("Choose Option");
+            System.out.println("1. Sign Up");
+            System.out.println("2. Login");
+            System.out.println("3. Fetch Bookings");
+            System.out.println("4. Search Trains");
+            System.out.println("5. Book a Seat");
+            System.out.println("6. Cancel My Booking");
+            System.out.println("7. Exit the App");
+            option = scan.nextInt();
+            Train trainSelectedForBooking = new Train();
+            switch (option) {
+                case 1:
+                    System.out.println("Enter the username to signup");
+                    String nameToSignUp = scan.next();
+                    System.out.println("Enter the password to signup");
+                    String passwordToSignUp = scan.next();
+                    User user = new User(nameToSignUp, passwordToSignUp, UserServiceUtil.hashPassword(passwordToSignUp), new ArrayList<Ticket>(), UUID.randomUUID().toString());
+                    userBookingService.signUp(user);
+                    break;
 
-        //Third way by calling the method itself inside filter method
-//        List<Integer> list1 = list.stream().filter(isEven()).toList();
-//        System.out.println(list1);
+                case 2:
+                    System.out.println("Enter the Username to login");
+                    String nameToLogin = scan.next();
+                    System.out.println("Enter the password to Login");
+                    String passwordToLogin = scan.next();
+
+                    User userToLogin = new User(nameToLogin, passwordToLogin, UserServiceUtil.hashPassword(passwordToLogin), new ArrayList<Ticket>(), UUID.randomUUID().toString());
+                    try {
+                        userBookingService = new UserBookingService(userToLogin);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                        return;
+                    }
+                    break;
+                case 3:
+                    System.out.println("Fetching you bookings!!");
+                    userBookingService.fetchBooking();
+                    break;
+
+                case 4:
+                    System.out.println("Type your Source Station");
+                    String source = scan.next();
+                    System.out.println("Type your Destination Station");
+                    String destination = scan.next();
+                    List<Train> trains = userBookingService.getTrains(source, destination);
+                    int index = 1;
+                    for (Train t : trains) {
+                        System.out.println(index + " Train id : " + t.getTrainId());
+                        for (Map.Entry<String, String> entry : t.getStationTimes().entrySet()) {
+                            System.out.println("Station " + entry.getKey() + " time: " + entry.getValue());
+                        }
+                    }
+                    System.out.println("Select a train by typing 1,2,3...");
+                    trainSelectedForBooking = trains.get(scan.nextInt());
+                    break;
+
+                case 5:
+                    System.out.println("Select a seat out of these seats");
+                    List<List<Integer>> seats = userBookingService.fetchSeats(trainSelectedForBooking);
+                    for (List<Integer> row : seats) {
+                        for (Integer val : row) {
+                            System.out.print(val + "");
+                        }
+                    }
+                    System.out.println();
+
+                    System.out.println("Select the seat by typing the row and column");
+                    System.out.println("Enter the row");
+                    int row = scan.nextInt();
+                    System.out.println("Enter the column");
+                    int col = scan.nextInt();
+                    System.out.println("Booking your seat...");
+                    Boolean booked = userBookingService.bookTrainSeat(trainSelectedForBooking, row, col);
+                    if (booked.equals(Boolean.TRUE)) {
+                        System.out.println("Booked! Enjoy your journey");
+                    } else {
+                        System.out.println("Can't book this seat");
+                    }
+                    break;
+            }
+        }
+
     }
-
-//    public static Predicate<Integer> isEven(){
-//        //One way to use actual function
-////        return new Predicate<Integer>() {
-////            @Override
-////            public boolean test(Integer integer) {
-////                return integer % 2 ==0;
-////         };
-//
-//        //Returning lambdas
-//        return i -> i % 2 == 0;
-//    }
 }
 
 //Trying to get the Directory Hierarchy
@@ -69,3 +141,6 @@ public class App {
 //
 //        // Print the current working directory
 //        System.out.println("Current working directory: " + currentDir);
+
+//--------------------------------------------------------------------------------
+//Trying-out the lambdas and how predicate functions work
